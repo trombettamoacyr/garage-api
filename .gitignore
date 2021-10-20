@@ -5,6 +5,7 @@
 *.so
 *.dylib
 .idea/
+firestore/
 
 # Test binary, built with `go test -c`
 *.test
