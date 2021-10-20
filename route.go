@@ -1,34 +1,22 @@
 package main
 
 import (
+	"github.com/trombettamoacyr/garage-api/entity"
+	"github.com/trombettamoacyr/garage-api/repository"
+
 	"encoding/json"
-	"net/http"
-
 	"github.com/google/uuid"
+	"net/http"
 )
-
-type Car struct {
-	Id      uuid.UUID `json:"id"`
-	Model   string    `json:"model"`
-	Brand   string    `json:"brand"`
-	Hp      int       `json:"hp"`
-	License string    `json:"license"`
-}
 
 var (
-	cars []Car
+	repo = repository.NewCarRepository()
 )
-
-func init() {
-	cars = []Car{
-		Car{
-			Id: generateUUID(), Model: "UP", Brand: "Volkswagen", Hp: 100, License: "ABC1020",
-		},
-	}
-}
 
 func getCars(resp http.ResponseWriter, req *http.Request) {
 	resp.Header().Set("Content-type", "application/json")
+	cars, err := repo.FindAll()
+	handleError(err)
 	result, err := json.Marshal(cars)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
@@ -40,7 +28,7 @@ func getCars(resp http.ResponseWriter, req *http.Request) {
 }
 
 func createCar(resp http.ResponseWriter, req *http.Request) {
-	var car Car
+	var car entity.Car
 	err := json.NewDecoder(req.Body).Decode(&car)
 	if err != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
@@ -48,8 +36,10 @@ func createCar(resp http.ResponseWriter, req *http.Request) {
 		return
 	}
 	car.Id = generateUUID()
-	cars = append(cars, car)
-	result, _ := json.Marshal(car)
+	newCar, err := repo.Save(&car)
+	handleError(err)
+
+	result, _ := json.Marshal(newCar)
 	resp.Header().Set("Content-type", "application/json")
 	resp.WriteHeader(http.StatusCreated)
 	resp.Write(result)
