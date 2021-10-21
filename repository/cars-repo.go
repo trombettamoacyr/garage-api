@@ -6,6 +6,7 @@ import (
 	"cloud.google.com/go/firestore"
 	"context"
 	"github.com/google/uuid"
+	"google.golang.org/api/iterator"
 	"log"
 )
 
@@ -21,7 +22,7 @@ func NewCarRepository() CarRepository {
 }
 
 const (
-	projectId      = "garage-api"
+	projectId      = "garage-api-e1e76"
 	collectionName = "car"
 )
 
@@ -34,7 +35,7 @@ func (*repo) Save(car *entity.Car) (*entity.Car, error) {
 	defer client.Close()
 
 	_, _, err = client.Collection(collectionName).Add(ctx, map[string]interface{}{
-		"id":      car.Id,
+		"id":      car.Id.String(),
 		"model":   car.Model,
 		"brand":   car.Brand,
 		"hp":      car.Hp,
@@ -57,18 +58,22 @@ func (*repo) FindAll() ([]entity.Car, error) {
 	defer client.Close()
 
 	var cars []entity.Car
-	iterator := client.Collection(collectionName).Documents(ctx)
+	iter := client.Collection(collectionName).Documents(ctx)
 	for {
-		doc, err := iterator.Next()
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
 		if err != nil {
 			log.Fatalf("Failed to iterate the list of cars: %v", err)
-			return nil, err
+			return cars, nil
 		}
+
 		car := entity.Car{
-			Id:      doc.Data()["id"].(uuid.UUID),
+			Id:      uuid.MustParse(doc.Data()["id"].(string)),
 			Model:   doc.Data()["model"].(string),
 			Brand:   doc.Data()["brand"].(string),
-			Hp:      doc.Data()["hp"].(int),
+			Hp:      int(doc.Data()["hp"].(int64)),
 			License: doc.Data()["license"].(string),
 		}
 		cars = append(cars, car)

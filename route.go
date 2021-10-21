@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/trombettamoacyr/garage-api/entity"
 	"github.com/trombettamoacyr/garage-api/repository"
+	"log"
 
 	"encoding/json"
 	"github.com/google/uuid"
@@ -53,6 +54,6 @@ func generateUUID() uuid.UUID {
 
 func handleError(err error) {
 	if err != nil {
-		panic(err.Error())
+		log.Fatalf("Failed to iterate the list of cars: %v", err)
 	}
 }
