@@ -2,20 +2,24 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"github.com/trombettamoacyr/garage-api/controller"
+	"github.com/trombettamoacyr/garage-api/http"
 	"net/http"
+)
 
-	"github.com/gorilla/mux"
+var (
+	httpRouter = router.NewMuxRouter()
 )
 
 func main() {
-	router := mux.NewRouter()
 	const port string = ":8080"
-	router.HandleFunc("/", func(resp http.ResponseWriter, req *http.Request) {
-		fmt.Fprintln(resp, "Up and running...")
+
+	httpRouter.GET("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "Up and running...")
 	})
-	router.HandleFunc("/cars", getCars).Methods("GET")
-	router.HandleFunc("/cars", createCar).Methods("POST")
-	log.Println("Server listening on port", port)
-	log.Fatalln(http.ListenAndServe(port, router))
+
+	httpRouter.GET("/cars", controller.GetCars)
+	httpRouter.POST("/cars", controller.CreateCar)
+
+	httpRouter.SERVER(port)
 }
