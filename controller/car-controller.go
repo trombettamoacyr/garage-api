@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/trombettamoacyr/garage-api/entity"
+	"github.com/trombettamoacyr/garage-api/error"
 	"github.com/trombettamoacyr/garage-api/service"
 )
 
@@ -25,16 +26,16 @@ func CreateCar(resp http.ResponseWriter, req *http.Request) {
 		resp.Write([]byte(`{"error": "Error unmarshalling the request"`))
 		return
 	}
-	err = carService.Validate(&car)
-	if err != nil {
+	err1 := carService.Validate(&car)
+	if err1 != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		resp.Write([]byte(`{"error": Contains fields empty"`))
+		json.NewEncoder(resp).Encode(error.ServiceError{Message: err1.Error()})
 		return
 	}
-	newCar, err := carService.Create(&car)
-	if err != nil {
+	newCar, err2 := carService.Create(&car)
+	if err2 != nil {
 		resp.WriteHeader(http.StatusInternalServerError)
-		resp.Write([]byte(`{"error": "Error unmarshalling the request"`))
+		json.NewEncoder(resp).Encode(error.ServiceError{Message: err2.Error()})
 		return
 	}
 	result, _ := json.Marshal(newCar)

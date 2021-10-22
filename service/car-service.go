@@ -41,7 +41,7 @@ func (*service) Validate(car *entity.Car) error {
 		err := errors.New("The brand is empty.")
 		return err
 	}
-	if car.Hp != 0 {
+	if car.Hp == 0 {
 		err := errors.New("The horse power is empty.")
 		return err
 	}
