@@ -9,6 +9,7 @@ import (
 
 var (
 	httpRouter = router.NewMuxRouter()
+	//httpRouter = router.NewChiRouter()
 )
 
 func main() {
