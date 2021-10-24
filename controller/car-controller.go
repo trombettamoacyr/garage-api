@@ -16,13 +16,14 @@ type CarController interface {
 
 type controller struct{}
 
-var (
-	carService = service.NewCarService()
-)
-
-func NewCarController () CarController {
+func NewCarController(service service.CarService) CarController {
+	carService = service
 	return &controller{}
 }
+
+var (
+	carService service.CarService
+)
 
 func (*controller) CreateCar(resp http.ResponseWriter, req *http.Request) {
 	var car entity.Car

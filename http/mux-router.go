@@ -7,7 +7,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-type muxRouter struct {}
+type muxRouter struct{}
 
 func NewMuxRouter() Router {
 	return &muxRouter{}
@@ -26,6 +26,6 @@ func (*muxRouter) GET(uri string, f func(resp http.ResponseWriter, req *http.Req
 	muxDispatcher.HandleFunc(uri, f).Methods("GET")
 }
 
-func (*muxRouter) POST(uri string, f func(resp http.ResponseWriter, req *http.Request)){
+func (*muxRouter) POST(uri string, f func(resp http.ResponseWriter, req *http.Request)) {
 	muxDispatcher.HandleFunc(uri, f).Methods("POST")
 }

@@ -4,14 +4,17 @@ import (
 	"fmt"
 	"github.com/trombettamoacyr/garage-api/controller"
 	"github.com/trombettamoacyr/garage-api/http"
+	"github.com/trombettamoacyr/garage-api/repository"
+	"github.com/trombettamoacyr/garage-api/service"
 	"net/http"
 )
 
 var (
 	httpRouter = router.NewMuxRouter()
 	//httpRouter = router.NewChiRouter()
-
-	carController = controller.NewCarController()
+	carRepository = repository.NewFirestoreRepository()
+	carService    = service.NewCarService(carRepository)
+	carController = controller.NewCarController(carService)
 )
 
 func main() {

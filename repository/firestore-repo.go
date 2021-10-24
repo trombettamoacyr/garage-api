@@ -17,7 +17,7 @@ const (
 
 type repo struct{}
 
-func NewCarRepository() CarRepository {
+func NewFirestoreRepository() CarRepository {
 	return &repo{}
 }
 

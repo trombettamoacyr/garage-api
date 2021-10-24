@@ -16,12 +16,13 @@ type CarService interface {
 
 type service struct{}
 
-func NewCarService() CarService {
+func NewCarService(repository repository.CarRepository) CarService {
+	repo = repository
 	return &service{}
 }
 
 var (
-	repo = repository.NewCarRepository()
+	repo repository.CarRepository
 )
 
 func (*service) FindAll() ([]entity.Car, error) {
