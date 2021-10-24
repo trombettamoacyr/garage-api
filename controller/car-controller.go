@@ -14,11 +14,17 @@ type CarController interface {
 	GetCars(resp http.ResponseWriter, req *http.Request)
 }
 
+type controller struct{}
+
 var (
 	carService = service.NewCarService()
 )
 
-func CreateCar(resp http.ResponseWriter, req *http.Request) {
+func NewCarController () CarController {
+	return &controller{}
+}
+
+func (*controller) CreateCar(resp http.ResponseWriter, req *http.Request) {
 	var car entity.Car
 	err := json.NewDecoder(req.Body).Decode(&car)
 	if err != nil {
@@ -44,7 +50,7 @@ func CreateCar(resp http.ResponseWriter, req *http.Request) {
 	resp.Write(result)
 }
 
-func GetCars(resp http.ResponseWriter, req *http.Request) {
+func (*controller) GetCars(resp http.ResponseWriter, req *http.Request) {
 	resp.Header().Set("Content-type", "application/json")
 	cars, err := carService.FindAll()
 	if err != nil {

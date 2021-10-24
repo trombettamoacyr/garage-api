@@ -10,6 +10,8 @@ import (
 var (
 	httpRouter = router.NewMuxRouter()
 	//httpRouter = router.NewChiRouter()
+
+	carController = controller.NewCarController()
 )
 
 func main() {
@@ -19,8 +21,8 @@ func main() {
 		fmt.Fprintln(w, "Up and running...")
 	})
 
-	httpRouter.GET("/cars", controller.GetCars)
-	httpRouter.POST("/cars", controller.CreateCar)
+	httpRouter.GET("/cars", carController.GetCars)
+	httpRouter.POST("/cars", carController.CreateCar)
 
 	httpRouter.SERVER(port)
 }

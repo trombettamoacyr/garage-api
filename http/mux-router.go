@@ -17,7 +17,6 @@ var (
 	muxDispatcher = mux.NewRouter()
 )
 
-
 func (*muxRouter) SERVER(port string) {
 	fmt.Printf("Mux HTTP server running on port %v", port)
 	http.ListenAndServe(port, muxDispatcher)
