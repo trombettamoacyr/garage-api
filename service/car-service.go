@@ -31,7 +31,7 @@ func (*service) FindAll() ([]entity.Car, error) {
 
 func (*service) Validate(car *entity.Car) error {
 	if car == nil {
-		err := errors.New("The car is empty.")
+		err := errors.New("The car is null.")
 		return err
 	}
 	if car.Model == "" {
