@@ -30,11 +30,13 @@ func (*repo) Save(car *entity.Car) (*entity.Car, error) {
 	defer client.Close()
 
 	_, _, err = client.Collection(collectionName).Add(ctx, map[string]interface{}{
-		"id":      car.Id.String(),
-		"model":   car.Model,
-		"brand":   car.Brand,
-		"hp":      car.Hp,
-		"license": car.License,
+		"id":              car.Id.String(),
+		"model":           car.Model,
+		"brand":           car.Brand,
+		"hp":              car.Hp,
+		"license":         car.License,
+		"insurance_price": car.InsurancePrice,
+		"owner_id":        car.OwnerId,
 	})
 
 	if err != nil {
@@ -65,11 +67,13 @@ func (*repo) FindAll() ([]entity.Car, error) {
 		}
 
 		car := entity.Car{
-			Id:      uuid.MustParse(doc.Data()["id"].(string)),
-			Model:   doc.Data()["model"].(string),
-			Brand:   doc.Data()["brand"].(string),
-			Hp:      int(doc.Data()["hp"].(int64)),
-			License: doc.Data()["license"].(string),
+			Id:             uuid.MustParse(doc.Data()["id"].(string)),
+			Model:          doc.Data()["model"].(string),
+			Brand:          doc.Data()["brand"].(string),
+			Hp:             int(doc.Data()["hp"].(int64)),
+			License:        doc.Data()["license"].(string),
+			InsurancePrice: doc.Data()["insurance_price"].(float64),
+			OwnerId:        doc.Data()["owner_id"].(string),
 		}
 		cars = append(cars, car)
 	}

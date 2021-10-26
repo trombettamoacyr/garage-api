@@ -78,6 +78,17 @@ func TestValidateLicenseCar(t *testing.T) {
 	assert.Equal(t, errMessageExpected, err.Error())
 }
 
+func TestValidateOwnerId(t *testing.T) {
+	car := getCarMock()
+	car.OwnerId = ""
+	errMessageExpected := "The owner-id is empty."
+
+	err := testServiceNoRepo.Validate(&car)
+
+	assert.NotNil(t, err)
+	assert.Equal(t, errMessageExpected, err.Error())
+}
+
 func (mock *MockRepository) FindAll() ([]entity.Car, error) {
 	args := mock.Called()
 	result := args.Get(0)
@@ -134,5 +145,6 @@ func getCarMock() entity.Car {
 		Brand:   "Brand",
 		Hp:      999,
 		License: "License",
+		OwnerId: "id",
 	}
 }

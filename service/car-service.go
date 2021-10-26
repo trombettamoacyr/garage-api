@@ -50,6 +50,10 @@ func (*service) Validate(car *entity.Car) error {
 		err := errors.New("The license is empty.")
 		return err
 	}
+	if car.OwnerId == "" {
+		err := errors.New("The owner-id is empty.")
+		return err
+	}
 	return nil
 }
 
