@@ -89,6 +89,12 @@ func TestValidateOwnerId(t *testing.T) {
 	assert.Equal(t, errMessageExpected, err.Error())
 }
 
+func (mock *MockRepository) FindById(id uuid.UUID) (*entity.Car, error) {
+	args := mock.Called()
+	result := args.Get(0)
+	return result.(*entity.Car), args.Error(1)
+}
+
 func (mock *MockRepository) FindAll() ([]entity.Car, error) {
 	args := mock.Called()
 	result := args.Get(0)

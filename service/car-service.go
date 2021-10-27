@@ -10,6 +10,7 @@ import (
 
 type CarService interface {
 	FindAll() ([]entity.Car, error)
+	FindById(id string) (*entity.Car, error)
 	Validate(car *entity.Car) error
 	Create(car *entity.Car) (*entity.Car, error)
 }
@@ -27,6 +28,15 @@ var (
 
 func (*service) FindAll() ([]entity.Car, error) {
 	return repo.FindAll()
+}
+
+func (*service) FindById(id string) (*entity.Car, error) {
+	car, err := repo.FindById(uuid.MustParse(id))
+	if err != nil {
+		err := errors.New("Car not found.")
+		return nil, err
+	}
+	return car, nil
 }
 
 func (*service) Validate(car *entity.Car) error {
