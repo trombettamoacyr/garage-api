@@ -10,16 +10,16 @@ import (
 	"github.com/trombettamoacyr/garage-api/entity"
 )
 
-const (
-	projectId      = "garage-api-e1e76"
-	collectionName = "car"
-)
-
 type repo struct{}
 
 func NewFirestoreRepository() CarRepository {
 	return &repo{}
 }
+
+const (
+	projectId      = "garage-api-e1e76"
+	collectionName = "car"
+)
 
 func (*repo) Save(car *entity.Car) (*entity.Car, error) {
 	ctx, client, err := createFirestoreClient()
@@ -63,7 +63,7 @@ func (*repo) FindAll() ([]entity.Car, error) {
 		}
 		if err != nil {
 			log.Fatalf("Failed to iterate the list of cars: %v", err)
-			return cars, nil
+			return nil, err
 		}
 
 		car := entity.Car{
@@ -78,6 +78,34 @@ func (*repo) FindAll() ([]entity.Car, error) {
 		cars = append(cars, car)
 	}
 	return cars, nil
+}
+
+func (*repo) FindById(id uuid.UUID) (*entity.Car, error) {
+	ctx, client, err := createFirestoreClient()
+	if err != nil {
+		log.Fatalf("Failed to create a Firestore Client: %v", err)
+		return nil, err
+	}
+	defer client.Close()
+
+	iter := client.Collection(collectionName).Where("id", "==", id.String()).Documents(ctx)
+
+	doc, err := iter.Next()
+	if err != nil {
+		log.Fatalf("Failed to find the car: %v", err)
+		return nil, err
+	}
+
+	car := entity.Car{
+		Id:             uuid.MustParse(doc.Data()["id"].(string)),
+		Model:          doc.Data()["model"].(string),
+		Brand:          doc.Data()["brand"].(string),
+		Hp:             int(doc.Data()["hp"].(int64)),
+		License:        doc.Data()["license"].(string),
+		InsurancePrice: doc.Data()["insurance_price"].(float64),
+		OwnerId:        doc.Data()["owner_id"].(string),
+	}
+	return &car, nil
 }
 
 func createFirestoreClient() (context.Context, *firestore.Client, error) {
