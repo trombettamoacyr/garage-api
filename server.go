@@ -25,6 +25,7 @@ func main() {
 	})
 
 	httpRouter.GET("/cars", carController.GetCars)
+	httpRouter.GET("/cars/{id}", carController.GetCarById)
 	httpRouter.POST("/cars", carController.CreateCar)
 
 	httpRouter.SERVER(port)
