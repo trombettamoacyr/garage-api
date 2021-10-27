@@ -3,6 +3,7 @@ package repository
 import (
 	"cloud.google.com/go/firestore"
 	"context"
+	"errors"
 	"github.com/google/uuid"
 	"google.golang.org/api/iterator"
 	"log"
@@ -92,7 +93,7 @@ func (*repo) FindById(id uuid.UUID) (*entity.Car, error) {
 
 	doc, err := iter.Next()
 	if err != nil {
-		log.Fatalf("Failed to find the car: %v", err)
+		err := errors.New("Failed to find the car.")
 		return nil, err
 	}
 
