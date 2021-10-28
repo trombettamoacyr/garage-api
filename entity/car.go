@@ -8,6 +8,6 @@ type Car struct {
 	Brand          string    `json:"brand"`
 	Hp             int       `json:"hp"`
 	License        string    `json:"license"`
-	InsurancePrice float64   `json:"insurance_price"`
+	InsurancePrice string    `json:"insurance_price"`
 	OwnerId        string    `json:"owner_id"`
 }

@@ -73,7 +73,7 @@ func (*repo) FindAll() ([]entity.Car, error) {
 			Brand:          doc.Data()["brand"].(string),
 			Hp:             int(doc.Data()["hp"].(int64)),
 			License:        doc.Data()["license"].(string),
-			InsurancePrice: doc.Data()["insurance_price"].(float64),
+			InsurancePrice: doc.Data()["insurance_price"].(string),
 			OwnerId:        doc.Data()["owner_id"].(string),
 		}
 		cars = append(cars, car)
@@ -103,7 +103,7 @@ func (*repo) FindById(id uuid.UUID) (*entity.Car, error) {
 		Brand:          doc.Data()["brand"].(string),
 		Hp:             int(doc.Data()["hp"].(int64)),
 		License:        doc.Data()["license"].(string),
-		InsurancePrice: doc.Data()["insurance_price"].(float64),
+		InsurancePrice: doc.Data()["insurance_price"].(string),
 		OwnerId:        doc.Data()["owner_id"].(string),
 	}
 	return &car, nil
