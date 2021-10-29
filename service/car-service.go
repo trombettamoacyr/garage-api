@@ -17,13 +17,15 @@ type CarService interface {
 
 type service struct{}
 
-func NewCarService(repository repository.CarRepository) CarService {
+func NewCarService(carInsuranceService CarInsurance, repository repository.CarRepository) CarService {
 	repo = repository
+	insuranceService = carInsuranceService
 	return &service{}
 }
 
 var (
 	repo repository.CarRepository
+	insuranceService CarInsurance
 )
 
 func (*service) FindAll() ([]entity.Car, error) {
@@ -69,6 +71,10 @@ func (*service) Validate(car *entity.Car) error {
 
 func (*service) Create(car *entity.Car) (*entity.Car, error) {
 	newUUID, _ := uuid.NewRandom()
+	insuranceValue := insuranceService.FetchValue()
+
 	car.Id = newUUID
+	car.InsuranceValue = insuranceValue
+
 	return repo.Save(car)
 }

@@ -13,8 +13,8 @@ var (
 	httpRouter = router.NewMuxRouter()
 	//httpRouter = router.NewChiRouter()
 	carRepository = repository.NewFirestoreRepository()
-	carService    = service.NewCarService(carRepository)
-	carDetailsService = service.NewFetchCarDateService()
+	insuranceService = service.NewCarInsuranceService()
+	carService    = service.NewCarService(insuranceService, carRepository)
 	carController = controller.NewCarController(carService)
 )
 
@@ -23,7 +23,6 @@ func main() {
 
 	httpRouter.GET("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "Up and running...")
-		carDetailsService.FetchCarData("Chevrolet")
 	})
 
 	httpRouter.GET("/cars", carController.GetCars)

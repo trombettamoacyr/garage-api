@@ -36,7 +36,7 @@ func (*repo) Save(car *entity.Car) (*entity.Car, error) {
 		"brand":           car.Brand,
 		"hp":              car.Hp,
 		"license":         car.License,
-		"insurance_price": car.InsurancePrice,
+		"insurance_value": car.InsuranceValue,
 		"owner_id":        car.OwnerId,
 	})
 
@@ -73,7 +73,7 @@ func (*repo) FindAll() ([]entity.Car, error) {
 			Brand:          doc.Data()["brand"].(string),
 			Hp:             int(doc.Data()["hp"].(int64)),
 			License:        doc.Data()["license"].(string),
-			InsurancePrice: doc.Data()["insurance_price"].(string),
+			InsuranceValue: doc.Data()["insurance_value"].(string),
 			OwnerId:        doc.Data()["owner_id"].(string),
 		}
 		cars = append(cars, car)
@@ -103,7 +103,7 @@ func (*repo) FindById(id uuid.UUID) (*entity.Car, error) {
 		Brand:          doc.Data()["brand"].(string),
 		Hp:             int(doc.Data()["hp"].(int64)),
 		License:        doc.Data()["license"].(string),
-		InsurancePrice: doc.Data()["insurance_price"].(string),
+		InsuranceValue: doc.Data()["insurance_value"].(string),
 		OwnerId:        doc.Data()["owner_id"].(string),
 	}
 	return &car, nil
