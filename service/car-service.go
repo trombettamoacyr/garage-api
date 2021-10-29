@@ -24,7 +24,7 @@ func NewCarService(carInsuranceService CarInsurance, repository repository.CarRe
 }
 
 var (
-	repo repository.CarRepository
+	repo             repository.CarRepository
 	insuranceService CarInsurance
 )
 
