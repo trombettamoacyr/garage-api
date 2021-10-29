@@ -1,7 +1,7 @@
 package model
 
 type Owner struct {
-	OwnerData `json:"User"`
+	Owner OwnerData `json:"User"`
 }
 
 type OwnerData struct {
