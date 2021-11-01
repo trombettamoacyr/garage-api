@@ -12,10 +12,11 @@ import (
 var (
 	httpRouter = router.NewMuxRouter()
 	//httpRouter = router.NewChiRouter()
-	carRepository = repository.NewFirestoreRepository()
+	carRepository    = repository.NewFirestoreRepository()
 	insuranceService = service.NewCarInsuranceService()
-	carService    = service.NewCarService(insuranceService, carRepository)
-	carController = controller.NewCarController(carService)
+	detailService    = service.NewCarDetailService()
+	carService       = service.NewCarService(detailService, insuranceService, carRepository)
+	carController    = controller.NewCarController(carService)
 )
 
 func main() {
@@ -27,6 +28,7 @@ func main() {
 
 	httpRouter.GET("/cars", carController.GetCars)
 	httpRouter.GET("/cars/{id}", carController.GetCarById)
+	httpRouter.GET("/cars/detail/{id}", carController.GetCarDetailById)
 	httpRouter.POST("/cars", carController.CreateCar)
 
 	httpRouter.SERVER(port)

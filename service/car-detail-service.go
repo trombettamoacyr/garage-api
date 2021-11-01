@@ -4,14 +4,14 @@ import (
 	"github.com/trombettamoacyr/garage-api/model"
 )
 
-type CarDetails interface {
-	FetchCarData(id string) model.CarDetails
+type CarDetail interface {
+	FetchCarData(id string) model.CarDetail
 }
 
-type carDetailsService struct{}
+type carDetailService struct{}
 
-func NewCarDetailsService() CarDetails {
-	return &carDetailsService{}
+func NewCarDetailService() CarDetail {
+	return &carDetailService{}
 }
 
 var (
@@ -21,11 +21,11 @@ var (
 	imageDataChannel = make(chan model.Image)
 )
 
-func (*carDetailsService) FetchCarData(id string) model.CarDetails {
+func (*carDetailService) FetchCarData(id string) model.CarDetail {
 	go ownerService.FetchDate(id)
 	go imageService.FetchData()
 
-	var car = model.CarDetails{}
+	var car = model.CarDetail{}
 	car.Owner = getOwnerData()
 	car.Image = getImageData()
 

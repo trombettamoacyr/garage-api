@@ -14,6 +14,7 @@ type CarController interface {
 	CreateCar(resp http.ResponseWriter, req *http.Request)
 	GetCars(resp http.ResponseWriter, req *http.Request)
 	GetCarById(resp http.ResponseWriter, req *http.Request)
+	GetCarDetailById(resp http.ResponseWriter, req *http.Request)
 }
 
 type controller struct{}
@@ -81,6 +82,31 @@ func (*controller) GetCarById(resp http.ResponseWriter, req *http.Request) {
 		return
 	}
 	car, err := carService.FindById(id)
+	if err != nil {
+		resp.WriteHeader(http.StatusNotFound)
+		resp.Write([]byte(`{"error": "Car not found"`))
+		return
+	}
+	result, err := json.Marshal(car)
+	if err != nil {
+		resp.WriteHeader(http.StatusInternalServerError)
+		resp.Write([]byte(`{"error": "Error marshalling the car entity"`))
+		return
+	}
+	resp.WriteHeader(http.StatusOK)
+	resp.Write(result)
+}
+
+func (*controller) GetCarDetailById(resp http.ResponseWriter, req *http.Request) {
+	resp.Header().Set("Content-type", "application/json")
+	vars := mux.Vars(req)
+	id, isPresent := vars["id"]
+	if !isPresent {
+		resp.WriteHeader(http.StatusBadRequest)
+		resp.Write([]byte(`{"error": "Id is required"`))
+		return
+	}
+	car, err := carService.FindDetailById(id)
 	if err != nil {
 		resp.WriteHeader(http.StatusNotFound)
 		resp.Write([]byte(`{"error": "Car not found"`))
