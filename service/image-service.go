@@ -8,7 +8,7 @@ import (
 )
 
 type ImageService interface {
-	FetchData() model.Image
+	FetchData()
 }
 
 type fetchImageService struct{}
@@ -21,7 +21,7 @@ const (
 	imageApiUrl = "https://jsonplaceholder.typicode.com/photos/"
 )
 
-func (*fetchImageService) FetchData() model.Image {
+func (*fetchImageService) FetchData() {
 	randomNum := util.NewRandomNumber(1, 2000)
 	urlApi := imageApiUrl + randomNum
 
@@ -31,5 +31,5 @@ func (*fetchImageService) FetchData() model.Image {
 	var image = model.Image{}
 	json.NewDecoder(resp.Body).Decode(&image)
 
-	return image
+	imageDataChannel <- image
 }
