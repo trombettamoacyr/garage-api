@@ -4,7 +4,7 @@ import (
 	"github.com/trombettamoacyr/garage-api/entity"
 )
 
-type CarDetails struct {
+type CarDetail struct {
 	Car   entity.Car
 	Owner Owner
 	Image Image
