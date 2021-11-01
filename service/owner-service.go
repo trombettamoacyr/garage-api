@@ -7,7 +7,7 @@ import (
 )
 
 type OwnerService interface {
-	FetchDate(id string) model.Owner
+	FetchDate(id string)
 }
 
 type fetchOwnerDataService struct{}
@@ -20,7 +20,7 @@ const (
 	ownerApiUrl = "https://myfakeapi.com/api/users/"
 )
 
-func (*fetchOwnerDataService) FetchDate(id string) model.Owner {
+func (*fetchOwnerDataService) FetchDate(id string) {
 	url := ownerApiUrl + id
 	client := http.Client{}
 	resp, _ := client.Get(url)
@@ -28,5 +28,5 @@ func (*fetchOwnerDataService) FetchDate(id string) model.Owner {
 	var owner = model.Owner{}
 	json.NewDecoder(resp.Body).Decode(&owner)
 
-	return owner
+	ownerDataChannel <- owner
 }
