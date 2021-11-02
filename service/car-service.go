@@ -10,7 +10,7 @@ import (
 )
 
 type CarService interface {
-	FindAll() ([]entity.Car, error)
+	FindAll() (*[]entity.Car, error)
 	FindById(id string) (*entity.Car, error)
 	FindDetailById(id string) (*model.CarDetail, error)
 	Validate(car *entity.Car) error
@@ -32,7 +32,7 @@ var (
 	insuranceService CarInsurance
 )
 
-func (*service) FindAll() ([]entity.Car, error) {
+func (*service) FindAll() (*[]entity.Car, error) {
 	return repo.FindAll()
 }
 

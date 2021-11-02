@@ -47,7 +47,7 @@ func (*repo) Save(car *entity.Car) (*entity.Car, error) {
 	return car, nil
 }
 
-func (*repo) FindAll() ([]entity.Car, error) {
+func (*repo) FindAll() (*[]entity.Car, error) {
 	ctx, client, err := createFirestoreClient()
 	if err != nil {
 		log.Fatalf("Failed to create a Firestore Client: %v", err)
@@ -78,7 +78,7 @@ func (*repo) FindAll() ([]entity.Car, error) {
 		}
 		cars = append(cars, car)
 	}
-	return cars, nil
+	return &cars, nil
 }
 
 func (*repo) FindById(id uuid.UUID) (*entity.Car, error) {

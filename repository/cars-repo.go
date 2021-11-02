@@ -7,6 +7,6 @@ import (
 
 type CarRepository interface {
 	Save(car *entity.Car) (*entity.Car, error)
-	FindAll() ([]entity.Car, error)
+	FindAll() (*[]entity.Car, error)
 	FindById(id uuid.UUID) (*entity.Car, error)
 }
