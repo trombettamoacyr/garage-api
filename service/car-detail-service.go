@@ -5,7 +5,7 @@ import (
 )
 
 type CarDetail interface {
-	FetchCarData(id string) model.CarDetail
+	FetchCarData(id string) *model.CarDetail
 }
 
 type carDetailService struct{}
@@ -21,7 +21,7 @@ var (
 	imageDataChannel = make(chan model.Image)
 )
 
-func (*carDetailService) FetchCarData(id string) model.CarDetail {
+func (*carDetailService) FetchCarData(id string) *model.CarDetail {
 	go ownerService.FetchDate(id)
 	go imageService.FetchData()
 
@@ -29,7 +29,7 @@ func (*carDetailService) FetchCarData(id string) model.CarDetail {
 	car.Owner = getOwnerData()
 	car.Image = getImageData()
 
-	return car
+	return &car
 }
 
 func getOwnerData() model.Owner {

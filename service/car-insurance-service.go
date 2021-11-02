@@ -18,12 +18,12 @@ func NewCarInsuranceService() CarInsurance {
 }
 
 const (
-	carDetailsUrl = "https://myfakeapi.com/api/cars/"
+	carDetailUrl = "https://myfakeapi.com/api/cars/"
 )
 
 func (*carInsuranceService) FetchValue() string {
 	randomNum := util.NewRandomNumber(1, 999)
-	urlApi := carDetailsUrl + randomNum
+	urlApi := carDetailUrl + randomNum
 
 	client := http.Client{}
 	resp, _ := client.Get(urlApi)
