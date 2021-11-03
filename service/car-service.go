@@ -26,6 +26,16 @@ func NewCarService(carDetailService CarDetail, carInsuranceService CarInsurance,
 	return &service{}
 }
 
+const (
+	errorMessageNilCar          = "car is null"
+	errorMessageCarNotFound     = "car not found"
+	errorMessageModelEmpty      = "model is empty"
+	errorMessageBrandEmpty      = "brand is empty"
+	errorMessageHousePowerEmpty = "horse power is empty"
+	errorMessageLicenseEmpty    = "license is empty"
+	errorMessageOwnerIdEmpty    = "owner id is empty"
+)
+
 var (
 	repo             repository.CarRepository
 	detailService    CarDetail
@@ -39,7 +49,7 @@ func (*service) FindAll() (*[]entity.Car, error) {
 func (*service) FindById(id string) (*entity.Car, error) {
 	car, err := repo.FindById(uuid.MustParse(id))
 	if err != nil {
-		err := errors.New("Car not found.")
+		err := errors.New(errorMessageNilCar)
 		return nil, err
 	}
 	return car, nil
@@ -48,7 +58,7 @@ func (*service) FindById(id string) (*entity.Car, error) {
 func (*service) FindDetailById(id string) (*model.CarDetail, error) {
 	car, err := repo.FindById(uuid.MustParse(id))
 	if err != nil {
-		err := errors.New("Car not found.")
+		err := errors.New(errorMessageCarNotFound)
 		return nil, err
 	}
 	ownerId := car.OwnerId
@@ -64,27 +74,27 @@ func (*service) FindDetailById(id string) (*model.CarDetail, error) {
 
 func (*service) Validate(car *entity.Car) error {
 	if car == nil {
-		err := errors.New("The car is null.")
+		err := errors.New(errorMessageNilCar)
 		return err
 	}
 	if car.Model == "" {
-		err := errors.New("The model is empty.")
+		err := errors.New(errorMessageModelEmpty)
 		return err
 	}
 	if car.Brand == "" {
-		err := errors.New("The brand is empty.")
+		err := errors.New(errorMessageBrandEmpty)
 		return err
 	}
 	if car.Hp == 0 {
-		err := errors.New("The horse power is empty.")
+		err := errors.New(errorMessageHousePowerEmpty)
 		return err
 	}
 	if car.License == "" {
-		err := errors.New("The license is empty.")
+		err := errors.New(errorMessageLicenseEmpty)
 		return err
 	}
 	if car.OwnerId == "" {
-		err := errors.New("The owner-id is empty.")
+		err := errors.New(errorMessageOwnerIdEmpty)
 		return err
 	}
 	return nil
