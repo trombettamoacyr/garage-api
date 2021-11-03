@@ -4,7 +4,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/trombettamoacyr/garage-api/model"
 	"testing"
 
 	"github.com/trombettamoacyr/garage-api/entity"
@@ -18,6 +17,10 @@ type MockRepository struct {
 	mock.Mock
 }
 
+type MockInsuranceService struct {
+	mock.Mock
+}
+
 func TestValidateSuccess(t *testing.T) {
 	car := getCarMock()
 
@@ -27,7 +30,7 @@ func TestValidateSuccess(t *testing.T) {
 }
 
 func TestValidateNilCar(t *testing.T) {
-	errMessageExpected := "The car is null."
+	errMessageExpected := "car is null"
 
 	err := testServiceNoRepo.Validate(nil)
 
@@ -38,7 +41,7 @@ func TestValidateNilCar(t *testing.T) {
 func TestValidateModelCar(t *testing.T) {
 	car := getCarMock()
 	car.Model = ""
-	errMessageExpected := "The model is empty."
+	errMessageExpected := "model is empty"
 
 	err := testServiceNoRepo.Validate(&car)
 
@@ -49,7 +52,7 @@ func TestValidateModelCar(t *testing.T) {
 func TestValidateBrandCar(t *testing.T) {
 	car := getCarMock()
 	car.Brand = ""
-	errMessageExpected := "The brand is empty."
+	errMessageExpected := "brand is empty"
 
 	err := testServiceNoRepo.Validate(&car)
 
@@ -60,7 +63,7 @@ func TestValidateBrandCar(t *testing.T) {
 func TestValidateHpCar(t *testing.T) {
 	car := getCarMock()
 	car.Hp = 0
-	errMessageExpected := "The horse power is empty."
+	errMessageExpected := "horse power is empty"
 
 	err := testServiceNoRepo.Validate(&car)
 
@@ -71,7 +74,7 @@ func TestValidateHpCar(t *testing.T) {
 func TestValidateLicenseCar(t *testing.T) {
 	car := getCarMock()
 	car.License = ""
-	errMessageExpected := "The license is empty."
+	errMessageExpected := "license is empty"
 
 	err := testServiceNoRepo.Validate(&car)
 
@@ -82,7 +85,7 @@ func TestValidateLicenseCar(t *testing.T) {
 func TestValidateOwnerId(t *testing.T) {
 	car := getCarMock()
 	car.OwnerId = ""
-	errMessageExpected := "The owner-id is empty."
+	errMessageExpected := "owner id is empty"
 
 	err := testServiceNoRepo.Validate(&car)
 
@@ -102,54 +105,65 @@ func (mock *MockRepository) FindById(id uuid.UUID) (*entity.Car, error) {
 	return result.(*entity.Car), args.Error(1)
 }
 
-func (mock *MockRepository) FindDetailById(id string) (*model.CarDetail, error) {
-	args := mock.Called()
-	result := args.Get(0)
-	return result.(*model.CarDetail), args.Error(1)
-}
-
-//func TestFindAll(t *testing.T) {
-//	car := getCarMock()
-//	mockRepo := new(MockRepository)
-//	mockRepo.On("FindAll").Return([]entity.Car{car}, nil)
-//
-//	carReturned, err := NewCarService(nil, nil, mockRepo).FindAll()
-//	carReturned2 := *carReturned
-//
-//	assert.NotNil(t, *carReturned)
-//	assert.Equal(t, car.Id, carReturned2[0].Id)
-//	assert.Equal(t, car.Model, carReturned2[0].Model)
-//	assert.Equal(t, car.Brand, carReturned2[0].Brand)
-//	assert.Equal(t, car.Hp, carReturned2[0].Hp)
-//	assert.Equal(t, car.License, carReturned2[0].License)
-//	assert.Nil(t, err)
-//
-//	mockRepo.AssertExpectations(t)
-//}
-
 func (mock *MockRepository) Save(car *entity.Car) (*entity.Car, error) {
 	args := mock.Called()
 	result := args.Get(0)
 	return result.(*entity.Car), args.Error(1)
 }
 
-//func TestCreate(t *testing.T) {
-//	car := getCarMock()
-//	mockRepo := new(MockRepository)
-//	mockRepo.On("Save").Return(&car, nil)
-//
-//	carReturned, err := NewCarService(nil, nil, mockRepo).Create(&car)
-//
-//	assert.NotNil(t, carReturned)
-//	assert.Equal(t, car.Id, carReturned.Id)
-//	assert.Equal(t, car.Model, carReturned.Model)
-//	assert.Equal(t, car.Brand, carReturned.Brand)
-//	assert.Equal(t, car.Hp, carReturned.Hp)
-//	assert.Equal(t, car.License, carReturned.License)
-//	assert.Nil(t, err)
-//
-//	mockRepo.AssertExpectations(t)
-//}
+func (mock *MockInsuranceService) FetchValue() string {
+	args := mock.Called()
+	result := args.Get(0)
+	return result.(string)
+}
+
+func TestFindAll(t *testing.T) {
+	car := getCarMock()
+	var cars []entity.Car
+	cars = append(cars, car)
+
+	mockRepo := new(MockRepository)
+	mockRepo.On("FindAll").Return(&cars, nil)
+
+	carsPointer, err := NewCarService(nil, nil, mockRepo).FindAll()
+	cars = *carsPointer
+
+	assert.NotNil(t, cars)
+	assert.Equal(t, car.Id, cars[0].Id)
+	assert.Equal(t, car.Model, cars[0].Model)
+	assert.Equal(t, car.Brand, cars[0].Brand)
+	assert.Equal(t, car.Hp, cars[0].Hp)
+	assert.Equal(t, car.License, cars[0].License)
+	assert.Equal(t, car.OwnerId, cars[0].OwnerId)
+	assert.Nil(t, err)
+
+	mockRepo.AssertExpectations(t)
+}
+
+func TestCreate(t *testing.T) {
+	car := getCarMock()
+	insuranceValue := "$9999.00"
+
+	mockInsurance := new(MockInsuranceService)
+	mockInsurance.On("FetchValue").Return(insuranceValue)
+
+	mockRepo := new(MockRepository)
+	mockRepo.On("Save").Return(&car, nil)
+
+	carReturned, err := NewCarService(nil, mockInsurance, mockRepo).Create(&car)
+
+	assert.NotNil(t, carReturned)
+	assert.Equal(t, car.Id, carReturned.Id)
+	assert.Equal(t, car.Model, carReturned.Model)
+	assert.Equal(t, car.Brand, carReturned.Brand)
+	assert.Equal(t, car.Hp, carReturned.Hp)
+	assert.Equal(t, car.License, carReturned.License)
+	assert.Equal(t, car.OwnerId, carReturned.OwnerId)
+	assert.Equal(t, insuranceValue, carReturned.InsuranceValue)
+	assert.Nil(t, err)
+
+	mockRepo.AssertExpectations(t)
+}
 
 func getCarMock() entity.Car {
 	carId, _ := uuid.NewRandom()
