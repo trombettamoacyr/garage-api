@@ -2,8 +2,9 @@ package service
 
 import (
 	"encoding/json"
-	"github.com/trombettamoacyr/garage-api/model"
 	"net/http"
+
+	"github.com/trombettamoacyr/garage-api/model"
 )
 
 type OwnerService interface {

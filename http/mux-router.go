@@ -2,8 +2,8 @@ package router
 
 import (
 	"fmt"
-	"net/http"
 	"github.com/gorilla/mux"
+	"net/http"
 )
 
 type muxRouter struct{}

@@ -2,9 +2,10 @@ package service
 
 import (
 	"encoding/json"
+	"net/http"
+
 	"github.com/trombettamoacyr/garage-api/model"
 	"github.com/trombettamoacyr/garage-api/util"
-	"net/http"
 )
 
 type CarInsurance interface {

@@ -3,9 +3,9 @@ package service
 import (
 	"errors"
 	"github.com/google/uuid"
-	"github.com/trombettamoacyr/garage-api/model"
 
 	"github.com/trombettamoacyr/garage-api/entity"
+	"github.com/trombettamoacyr/garage-api/model"
 	"github.com/trombettamoacyr/garage-api/repository"
 )
 

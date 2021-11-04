@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/google/uuid"
+
 	"github.com/trombettamoacyr/garage-api/entity"
 )
 
