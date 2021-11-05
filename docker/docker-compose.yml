@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+
+  postgres:
+    container_name: postgres-garage-api
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - /var/lib/postgresql/data
