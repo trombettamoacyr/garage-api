@@ -3,7 +3,15 @@ package config
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/lib/pq"
 	"os"
+)
+
+const (
+	CAR_TABLE = "CREATE TABLE public.car (id uuid NOT NULL, model varchar NOT NULL, brand varchar NOT NULL, " +
+		"hp int NOT NULL, license varchar NOT NULL, insurance_value varchar NULL, owner_id varchar NULL);"
+
+	CAR_TABLE_INDEX = "CREATE INDEX IF NOT EXISTS car_id_idx ON public.car (id);"
 )
 
 var (
@@ -14,7 +22,7 @@ var (
 	PASSWORD = os.Getenv("GARAGE_API_DB_PASSWORD")
 )
 
-func GetReaderSqlx() *sql.DB {
+func GetConnection() *sql.DB {
 	var DB_CONNECTION = fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s port=%s",
 		HOST, USER, NAME, PASSWORD, PORT)
 
@@ -22,5 +30,17 @@ func GetReaderSqlx() *sql.DB {
 	if err != nil {
 		panic(err.Error())
 	}
+	defer db.Close()
+
+	_, err = db.Exec(CAR_TABLE)
+	if err != nil {
+		panic(err.Error())
+	}
+	_, err = db.Exec(CAR_TABLE_INDEX)
+	if err != nil {
+		panic(err.Error())
+	}
+
 	return db
 }
+

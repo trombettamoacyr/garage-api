@@ -7,6 +7,7 @@ require (
 	github.com/go-chi/chi v1.5.4 // indirect
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
+	github.com/lib/pq v1.10.3 // indirect
 	github.com/stretchr/testify v1.7.0 // indirect
 	google.golang.org/api v0.59.0
 )
