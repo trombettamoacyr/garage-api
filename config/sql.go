@@ -31,8 +31,20 @@ func GetConnection() *sql.DB {
 		panic(err.Error())
 	}
 	defer db.Close()
+	verifyDatabase(db)
 
-	_, err = db.Exec(CAR_TABLE)
+	return db
+}
+
+func verifyDatabase(db *sql.DB) {
+	_, err := db.Query("select * from car where 1=1 limit 1;")
+	if err != nil {
+		createTable(db)
+	}
+}
+
+func createTable(db *sql.DB) {
+	_, err := db.Exec(CAR_TABLE)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -40,7 +52,4 @@ func GetConnection() *sql.DB {
 	if err != nil {
 		panic(err.Error())
 	}
-
-	return db
 }
-
