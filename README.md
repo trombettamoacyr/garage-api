@@ -1,6 +1,6 @@
 # garage-api
 
-This golang REST API was created as a study about Golang syntax, basic concepts and clean architecture.
+This golang REST API was created as a study about Golang concepts and clean architecture.
 
 The garage-api has a method post that allows user to store a car and its features in two different databases. 
 
