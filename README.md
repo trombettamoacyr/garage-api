@@ -8,11 +8,11 @@ Every car saved has its insurance value checked in other external api [myfakeapi
 
 There are two GET methods that show information about the cars already registered. The details are fetch concurrently (Goroutines) in externals APIs. Owner information in [myfakeapi/users](https://myfakeapi.com/api/users/) and car image in [jsonplaceholder](https://jsonplaceholder.typicode.com/photos/).
 
-###View collection
+### View collection
 
 - TODO
 
-###Dependencies:
+### Dependencies:
 
 - [Gorilla Mux](github.com/gorilla/mux) - Router http
 - [Chi](https://github.com/go-chi/chi) - Router http
@@ -20,12 +20,12 @@ There are two GET methods that show information about the cars already registere
 - [Postgres](github.com/lib/pq) - Postgres driver
 - [Testify](github.com/stretchr/testify) - Packages for Tests
 
-###Install dependencies
+### Install dependencies
 ``` 
 go build
 ``` 
 
-###Export environment variables
+### Export environment variables
 ``` 
 source .env
 ```
@@ -34,17 +34,17 @@ source .env
 export GOOGLE_APPLICATION_CREDENTIALS='/path/to/project-private-key.json'
 ``` 
 
-###Test (specific test)
+### Test (specific test)
 ``` 
 go test -run NameOfTest
 ``` 
 
-###Test (service folder)
+### Test (service folder)
 ``` 
 go test service/*.go
 ``` 
 
-###Create postgres container
+### Create postgres container
 ``` 
 make docker-start
 ``` 
@@ -53,7 +53,7 @@ Stop container
 make docker-stop
 ``` 
 
-###Run application
+### Run application
 ``` 
 go run .
 ```
