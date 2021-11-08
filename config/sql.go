@@ -30,7 +30,6 @@ func GetConnection() *sql.DB {
 	if err != nil {
 		panic(err.Error())
 	}
-	defer db.Close()
 	verifyDatabase(db)
 
 	return db
