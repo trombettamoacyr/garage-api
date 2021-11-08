@@ -28,7 +28,6 @@ func (*repo) Save(car *entity.Car) (*entity.Car, error) {
 		log.Fatalf("Failed to create a Firestore Client: %v", err)
 		return nil, err
 	}
-	defer client.Close()
 
 	_, _, err = client.Collection(collectionName).Add(ctx, map[string]interface{}{
 		"id":              car.Id.String(),
@@ -44,6 +43,7 @@ func (*repo) Save(car *entity.Car) (*entity.Car, error) {
 		log.Fatalf("Failed adding new Car: %v", err)
 		return nil, err
 	}
+	defer client.Close()
 	return car, nil
 }
 
@@ -53,10 +53,10 @@ func (*repo) FindAll() (*[]entity.Car, error) {
 		log.Fatalf("Failed to create a Firestore Client: %v", err)
 		return nil, err
 	}
-	defer client.Close()
 
 	var cars []entity.Car
 	iter := client.Collection(collectionName).Documents(ctx)
+
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -78,6 +78,7 @@ func (*repo) FindAll() (*[]entity.Car, error) {
 		}
 		cars = append(cars, car)
 	}
+	defer client.Close()
 	return &cars, nil
 }
 
@@ -87,7 +88,6 @@ func (*repo) FindById(id uuid.UUID) (*entity.Car, error) {
 		log.Fatalf("Failed to create a Firestore Client: %v", err)
 		return nil, err
 	}
-	defer client.Close()
 
 	iter := client.Collection(collectionName).Where("id", "==", id.String()).Documents(ctx)
 
@@ -106,6 +106,7 @@ func (*repo) FindById(id uuid.UUID) (*entity.Car, error) {
 		InsuranceValue: doc.Data()["insurance_value"].(string),
 		OwnerId:        doc.Data()["owner_id"].(string),
 	}
+	defer client.Close()
 	return &car, nil
 }
 
