@@ -14,10 +14,11 @@ There are two GET methods that show information about the cars already registere
 
 ### Dependencies:
 
-- [Gorilla Mux](github.com/gorilla/mux) - Router http
-- [Chi](https://github.com/go-chi/chi) - Router http
-- [Firestore](cloud.google.com/go/firestore) - Firestore driver
-- [Postgres](github.com/lib/pq) - Postgres driver
+- [Gorilla Mux](github.com/gorilla/mux) - Router
+- [Chi](https://github.com/go-chi/chi) - Router
+- [Firestore](cloud.google.com/go/firestore) - Firestore
+- [Postgres](github.com/lib/pq) - Postgres
+- [Sqlite3](github.com/mattn/go-sqlite3) - Sqlite3
 - [Testify](github.com/stretchr/testify) - Packages for Tests
 
 ### Install dependencies
