@@ -1,20 +1,18 @@
 package main
 
 import (
-	"fmt"
-	"github.com/trombettamoacyr/garage-api/config"
 	"github.com/trombettamoacyr/garage-api/controller"
 	"github.com/trombettamoacyr/garage-api/http"
 	"github.com/trombettamoacyr/garage-api/repository"
 	"github.com/trombettamoacyr/garage-api/service"
-	"net/http"
+	"os"
 )
 
 var (
 	httpRouter = router.NewMuxRouter()
 	//httpRouter = router.NewChiRouter()
-	//carRepository    = repository.NewFirestoreRepository()
-	carRepository = repository.NewPostgresRepo()
+	carRepository    = repository.NewFirestoreRepository()
+	//carRepository = repository.NewPostgresRepo()
 	insuranceService = service.NewCarInsuranceService()
 	detailService    = service.NewCarDetailService()
 	carService       = service.NewCarService(detailService, insuranceService, carRepository)
@@ -22,12 +20,7 @@ var (
 )
 
 func main() {
-	const port string = ":8080"
-
-	httpRouter.GET("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Up and running...")
-		config.GetConnection()
-	})
+	port := os.Getenv("GARAGE_API_PORT")
 
 	httpRouter.GET("/cars", carController.GetCars)
 	httpRouter.GET("/cars/{id}", carController.GetCarById)
