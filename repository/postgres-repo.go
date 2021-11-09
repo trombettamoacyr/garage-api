@@ -21,24 +21,26 @@ const (
 
 func (*postgresRepo) Save(car *entity.Car) (*entity.Car, error) {
 	dbConnection := config.GetConnection()
+	defer dbConnection.Close()
+
 	_, err := dbConnection.Exec(QUERY_SAVE, car.Id, car.Model, car.Brand, car.Hp, car.License, car.InsuranceValue, car.OwnerId)
 	if err != nil {
 		return nil, err
 	}
-	defer dbConnection.Close()
 	return car, nil
 }
 
 func (*postgresRepo) FindAll() (*[]entity.Car, error) {
 	dbConnection := config.GetConnection()
+	defer dbConnection.Close()
+
 	query, err := dbConnection.Query(QUERY_FIND_ALL)
 	if err != nil {
 		return nil, err
 	}
-	var cars []entity.Car
+
+	cars := []entity.Car{}
 	var car entity.Car
-	{
-	}
 
 	for query.Next() {
 		var carId uuid.UUID
@@ -63,38 +65,35 @@ func (*postgresRepo) FindAll() (*[]entity.Car, error) {
 
 		cars = append(cars, car)
 	}
-	defer dbConnection.Close()
 	return &cars, nil
 }
 
 func (*postgresRepo) FindById(id uuid.UUID) (*entity.Car, error) {
 	dbConnection := config.GetConnection()
-	query, err := dbConnection.Query(QUERY_FIND_BY_ID, id.String())
+	defer dbConnection.Close()
+
+	row := dbConnection.QueryRow(QUERY_FIND_BY_ID, id.String())
+
+	car := entity.Car{}
+	var carId uuid.UUID
+	var model string
+	var brand string
+	var hp int
+	var license string
+	var insuranceValue string
+	var ownerId string
+
+	err := row.Scan(&carId, &model, &brand, &hp, &license, &insuranceValue, &ownerId)
 	if err != nil {
 		return nil, err
 	}
-	car := entity.Car{}
-	for query.Next() {
-		var carId uuid.UUID
-		var model string
-		var brand string
-		var hp int
-		var license string
-		var insuranceValue string
-		var ownerId string
+	car.Id = carId
+	car.Model = model
+	car.Brand = brand
+	car.Hp = hp
+	car.License = license
+	car.InsuranceValue = insuranceValue
+	car.OwnerId = ownerId
 
-		err = query.Scan(&carId, &model, &brand, &hp, &license, &insuranceValue, &ownerId)
-		if err != nil {
-			return nil, err
-		}
-		car.Id = carId
-		car.Model = model
-		car.Brand = brand
-		car.Hp = hp
-		car.License = license
-		car.InsuranceValue = insuranceValue
-		car.OwnerId = ownerId
-	}
-	defer dbConnection.Close()
 	return &car, nil
 }
