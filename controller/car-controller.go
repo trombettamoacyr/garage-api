@@ -84,7 +84,7 @@ func (*controller) GetCarById(resp http.ResponseWriter, req *http.Request) {
 	car, err := carService.FindById(id)
 	if err != nil {
 		resp.WriteHeader(http.StatusNotFound)
-		resp.Write([]byte(`{"error": "Car not found"`))
+		resp.Write([]byte(`{"error": "Car not found"}`))
 		return
 	}
 	result, err := json.Marshal(car)
@@ -109,7 +109,7 @@ func (*controller) GetCarDetailById(resp http.ResponseWriter, req *http.Request)
 	car, err := carService.FindDetailById(id)
 	if err != nil {
 		resp.WriteHeader(http.StatusNotFound)
-		resp.Write([]byte(`{"error": "Car not found"`))
+		resp.Write([]byte(`{"error": "Car not found"}`))
 		return
 	}
 	result, err := json.Marshal(car)
