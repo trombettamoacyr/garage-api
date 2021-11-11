@@ -8,6 +8,11 @@ import (
 	"os"
 )
 
+// @title garage-api
+// @version 1.0.0
+// @host localhost:8080
+// @BasePath /cars
+
 var (
 	httpRouter = router.NewMuxRouter()
 	//httpRouter = router.NewChiRouter()

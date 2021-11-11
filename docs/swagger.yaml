@@ -1,0 +1,8 @@
+basePath: /cars
+host: localhost:8080
+info:
+  contact: {}
+  title: garage-api
+  version: 1.0.0
+paths: {}
+swagger: "2.0"
