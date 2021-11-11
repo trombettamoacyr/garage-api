@@ -10,25 +10,18 @@ import (
 	"github.com/trombettamoacyr/garage-api/service"
 )
 
-type CarController interface {
-	CreateCar(resp http.ResponseWriter, req *http.Request)
-	GetCars(resp http.ResponseWriter, req *http.Request)
-	GetCarById(resp http.ResponseWriter, req *http.Request)
-	GetCarDetailById(resp http.ResponseWriter, req *http.Request)
-}
-
-type controller struct{}
+type carController struct{}
 
 func NewCarController(service service.CarService) CarController {
 	carService = service
-	return &controller{}
+	return &carController{}
 }
 
 var (
 	carService service.CarService
 )
 
-func (*controller) CreateCar(resp http.ResponseWriter, req *http.Request) {
+func (*carController) CreateCar(resp http.ResponseWriter, req *http.Request) {
 	var car entity.Car
 	err := json.NewDecoder(req.Body).Decode(&car)
 	if err != nil {
@@ -54,7 +47,7 @@ func (*controller) CreateCar(resp http.ResponseWriter, req *http.Request) {
 	resp.Write(result)
 }
 
-func (*controller) GetCars(resp http.ResponseWriter, req *http.Request) {
+func (*carController) GetCars(resp http.ResponseWriter, req *http.Request) {
 	resp.Header().Set("Content-type", "application/json")
 	cars, err := carService.FindAll()
 	if err != nil {
@@ -72,7 +65,7 @@ func (*controller) GetCars(resp http.ResponseWriter, req *http.Request) {
 	resp.Write(result)
 }
 
-func (*controller) GetCarById(resp http.ResponseWriter, req *http.Request) {
+func (*carController) GetCarById(resp http.ResponseWriter, req *http.Request) {
 	resp.Header().Set("Content-type", "application/json")
 	vars := mux.Vars(req)
 	id, isPresent := vars["id"]
@@ -97,7 +90,7 @@ func (*controller) GetCarById(resp http.ResponseWriter, req *http.Request) {
 	resp.Write(result)
 }
 
-func (*controller) GetCarDetailById(resp http.ResponseWriter, req *http.Request) {
+func (*carController) GetCarDetailById(resp http.ResponseWriter, req *http.Request) {
 	resp.Header().Set("Content-type", "application/json")
 	vars := mux.Vars(req)
 	id, isPresent := vars["id"]
