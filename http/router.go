@@ -5,5 +5,6 @@ import "net/http"
 type Router interface {
 	GET(uri string, f func(resp http.ResponseWriter, req *http.Request))
 	POST(uri string, f func(resp http.ResponseWriter, req *http.Request))
+	SWAGGER(uri string, f func(http.HandlerFunc))
 	SERVER(port string)
 }
