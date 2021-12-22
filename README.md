@@ -53,6 +53,10 @@ make docker-start
 ``` 
 make docker-stop
 ``` 
+### Delete container
+``` 
+make docker-clean
+``` 
 
 ### Run application
 ``` 
