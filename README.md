@@ -49,7 +49,7 @@ go test service/*.go
 ``` 
 make docker-start
 ``` 
-Stop container
+### Stop container
 ``` 
 make docker-stop
 ``` 
